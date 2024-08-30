@@ -164,9 +164,13 @@ static const char MJReferenceReplacedKeyWhenCreatingKeyValuesKey = '\0';
                     value = [objectClass mj_objectArrayWithKeyValuesArray:value context:context];
                 }
             } else if (propertyClass == [NSString class]) {
-                if ([value isKindOfClass:[NSNumber class]]) {
-                    // NSNumber -> NSString
+                // NSNumber -> NSString
+                if ([value isMemberOfClass:[NSDecimalNumber class]]) {
                     value = [value description];
+                } else if ([value isKindOfClass:[NSNumber class]]) {
+                    NSString * temp = [NSString stringWithFormat:@"%lf",[(NSNumber *)value doubleValue]];
+                    value = [NSDecimalNumber decimalNumberWithString:temp].stringValue;
+                    value = [NSDecimalNumber decimalNumberWithString:temp].stringValue;
                 } else if ([value isKindOfClass:[NSURL class]]) {
                     // NSURL -> NSString
                     value = [value absoluteString];
